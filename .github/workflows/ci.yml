@@ -1,0 +1,40 @@
+# Vite + React + TypeScript — CI (lint, test, build)
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies (npm ci)
+        run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Unit tests (Vitest, single run)
+        run: npm run test:run
+
+      - name: Production build
+        run: npm run build
