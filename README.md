@@ -4,6 +4,32 @@ Vite + React + TypeScript 오목 프로젝트입니다.
 
 **배포 주소(GitHub Pages):** [https://ego1065.github.io/omok/](https://ego1065.github.io/omok/)
 
+## 실행 방법
+
+```bash
+npm install
+npm run dev
+```
+
+## 테스트
+
+```bash
+npm run test:run
+```
+
+## 빌드
+
+```bash
+npm run build
+```
+
+## 기술 스택
+
+- React + TypeScript + Vite
+- Tailwind CSS
+- Vitest (+ Testing Library)
+- GitHub Actions (CI / GitHub Pages 배포)
+
 ## GitHub Pages 배포 (`/omok/` 경로)
 
 이 저장소는 GitHub Pages에서 **프로젝트 페이지**로 게시됩니다. 사용자/조직 페이지(`username.github.io`)가 아니라 **`username.github.io/omok/`** 형태이므로, Vite의 `base`를 저장소 이름과 동일한 경로로 맞춥니다.
@@ -12,32 +38,40 @@ Vite + React + TypeScript 오목 프로젝트입니다.
 
 - `vite.config.ts`의 `base`는 **프로덕션 빌드**에서만 `'/omok/'`입니다. 개발 서버(`npm run dev`)는 루트(`/`)로 동작합니다.
 
-### 스크립트
+### CI / CD (GitHub Actions)
 
-| 명령 | 설명 |
-|------|------|
-| `npm run dev` | 로컬 개발 서버 |
-| `npm run build` | 타입 검사 후 `dist/` 프로덕션 빌드 (`base`가 `/omok/`로 적용됨) |
-| `npm run preview` | 빌드 결과 미리보기. 브라우저는 **`http://localhost:4173/omok/`** 로 열어야 자산 경로가 맞습니다. |
-| `npm run deploy` | `build` 후 `gh-pages` 브랜치에 `dist` 내용을 푸시 |
+- CI: `.github/workflows/ci.yml`  
+  `npm ci → npm run lint → npm run test:run → npm run build`
+- CD(배포): `.github/workflows/deploy-pages.yml`  
+  `main` push 시 `dist`를 Pages artifact로 업로드 후 `deploy-pages`로 배포
+
+> 이 저장소는 **`gh-pages` 브랜치에 직접 푸시하지 않고**, GitHub Pages의 **공식 Pages artifact 방식**을 사용합니다.
 
 ### GitHub 저장소 설정
 
 1. 저장소 이름이 `omok`이고, Pages가 **`https://ego1065.github.io/omok/`** 로 열리도록 구성합니다.
 2. GitHub → **Settings → Pages**
-   - **Build and deployment**: *Deploy from a branch*
-   - **Branch**: `gh-pages` / **Folder**: `/ (root)`
-3. 로컬에서 배포:
-
-   ```bash
-   npm run deploy
-   ```
-
-4. 푸시가 반영되면 Actions/Pages 빌드가 끝난 뒤 위 URL에서 확인합니다.
-
-> `deploy`는 [gh-pages](https://github.com/tschaub/gh-pages)로 `gh-pages` 브랜치를 갱신합니다. 처음 한 번은 저장소에 쓰기 권한이 있는 인증(GitHub CLI, SSH, 또는 HTTPS 자격 증명)이 필요합니다.
+   - **Build and deployment**: **GitHub Actions**
+3. `main`에 푸시하면 Actions가 자동으로 배포합니다.
 
 ---
+
+## AI 동작 방식(요약)
+
+- AI는 **백(white)** 입니다.
+- 우선순위:
+  1. 즉시 승리 수가 있으면 그 수 선택
+  2. 상대 즉시 승리 수가 있으면 차단
+  3. 그 외에는 휴리스틱 점수 기반으로 선택 (연속수/열린 끝/중앙 보너스)
+- 후보 수:
+  - 빈 보드면 중앙(7,7)
+  - 그 외에는 이미 놓인 돌 주변 2칸 이내의 빈 칸만 후보로 평가
+
+## 향후 개선 사항
+
+- 금수(33/44) 규칙 옵션
+- 후보 수/평가 함수 고도화 및 성능 최적화
+- UI 개선(좌표 표시, 확대/축소, 접근성 강화)
 
 ## React + TypeScript + Vite (템플릿 안내)
 

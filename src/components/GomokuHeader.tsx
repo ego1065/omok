@@ -7,7 +7,7 @@ type Props = Readonly<{
 }>
 
 function stoneLabel(s: Stone): string {
-  return s === 'B' ? '흑(사용자)' : '백(AI)'
+  return s === 'black' ? '흑(사용자)' : '백(AI)'
 }
 
 export function GomokuHeader({ turn, result, onReset }: Props) {

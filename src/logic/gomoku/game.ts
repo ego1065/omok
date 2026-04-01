@@ -7,7 +7,7 @@ export function createInitialState(size: number = GOMOKU_SIZE): GameState {
   return {
     size,
     board: createEmptyBoard(size),
-    turn: 'B',
+    turn: 'black',
     result: { kind: 'playing' },
     lastMove: null,
   }
@@ -17,7 +17,7 @@ export function applyMove(state: GameState, at: { r: number; c: number }, stone:
   const board = placeStone(state.board, at, stone)
   const lastMove = { stone, at }
   const result = checkWinner(board, lastMove)
-  const turn: Stone = stone === 'B' ? 'W' : 'B'
+  const turn: Stone = stone === 'black' ? 'white' : 'black'
   return { ...state, board, lastMove, result, turn }
 }
 
